@@ -2,6 +2,7 @@ package com.rku.sqlitedatabaseapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -33,17 +34,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertData(String enrollno, String fname, String lname){
-        String e = fname.trim().toLowerCase()+"."+lname.trim().toLowerCase()+"@rku.ac.in";
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(col_2,enrollno);
         contentValues.put(col_3,fname);
         contentValues.put(col_4,lname);
-        contentValues.put(col_5,e);
+        contentValues.put(col_5,fname.trim().toLowerCase()+"."+lname.trim().toLowerCase()+"@rku.ac.in");
         long result = db.insert(TABLE,null,contentValues);
         if(result == -1)
             return false;
         else
             return true;
+    }
+
+    public Cursor getAllData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("Select * from "+TABLE,null);
+        return res;
     }
 }
